@@ -39,7 +39,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" href="#">App Engine Guestbook</a>
+          <a class="brand" href="#">Videogame Reviews</a>
           <div class="nav-collapse collapse pull-right">
             <a href="{{ url|safe }}" class="btn">{{ url_linktext }}</a>
           </div>
@@ -47,30 +47,30 @@
       </div>
     </div>
     <div class="container">
-      {% for greeting in greetings %}
+      {% for review in reviews %}
       <div class="row">
-        {% if greeting.author %}
-          <b>{{ greeting.author.email }}
-            {% if user and user.user_id() == greeting.author.identity %}
+        {% if review.author %}
+          <b>{{ review.author.email }}
+            {% if user and user.user_id() == review.author.identity %}
               (You)
             {% endif %}
           </b> wrote:
         {% else %}
           An anonymous person wrote:
         {% endif %}
-        <blockquote>{{ greeting.content }}</blockquote>
+        <blockquote>{{ review.content }}</blockquote>
       </div>
       {% endfor %}
 
-      <form action="/sign?guestbook_name={{ guestbook_name }}" method="post">
+      <form action="/sign?review_title={{ review_title }}" method="post">
         <div><textarea name="content" class="input-block-level" rows="3"></textarea></div>
-        <div><input type="submit" class="btn btn-large btn-primary" value="Sign Guestbook"></div>
+        <div><input type="submit" class="btn btn-large btn-primary" value="Comentar"></div>
       </form>
 
       <hr>
 
-      <form>Guestbook name:
-        <input value="{{ guestbook_name }}" name="guestbook_name">
+      <form>Review title:
+        <input value="{{ review_title }}" name="review_title">
         <input type="submit" value="switch">
       </form>
 

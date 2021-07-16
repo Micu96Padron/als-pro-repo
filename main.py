@@ -12,16 +12,16 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
 
-DEFAULT_GUESTBOOK_NAME = 'default_guestbook'
+DEFAULT_REVIEW_TITLE = 'default_review'
 
-def guestbook_key(guestbook_name=DEFAULT_GUESTBOOK_NAME):
-    return ndb.Key('Guestbook', guestbook_name)
+def review_key(review_title=DEFAULT_REVIEW_TITLE):
+    return ndb.Key('Review', review_title)
 
 class Author(ndb.Model):
     identity = ndb.StringProperty(indexed=False)
     email = ndb.StringProperty(indexed=False)
 
-class Greeting(ndb.Model):
+class Review(ndb.Model):
     author = ndb.StructuredProperty(Author)
     content = ndb.StringProperty(indexed=False)
     date = ndb.DateTimeProperty(auto_now_add=True)
@@ -30,11 +30,11 @@ class Greeting(ndb.Model):
 class MainPage(webapp2.RequestHandler):
 
     def get(self):
-        guestbook_name = self.request.get('guestbook_name',
-                                          DEFAULT_GUESTBOOK_NAME)
-        greetings_query = Greeting.query(
-            ancestor=guestbook_key(guestbook_name)).order(-Greeting.date)
-        greetings = greetings_query.fetch(10)
+        review_title = self.request.get('review_title',
+                                       DEFAULT_REVIEW_TITLE)
+        review_query = Review.query(
+            ancestor=review_key(review_title)).order(-Review.date)
+        review = review_query.fetch(10)
 
         user = users.get_current_user()
         if user:
@@ -46,8 +46,8 @@ class MainPage(webapp2.RequestHandler):
 
         template_values = {
             'user': user,
-            'greetings': greetings,
-            'guestbook_name': urllib.quote_plus(guestbook_name),
+            'review': review,
+            'review_title': urllib.quote_plus(review_title),
             'url': url,
             'url_linktext': url_linktext,
         }
@@ -55,26 +55,26 @@ class MainPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('index.html')
         self.response.write(template.render(template_values))
 
-class Guestbook(webapp2.RequestHandler):
+class Reviews(webapp2.RequestHandler):
 
     def post(self):
-        guestbook_name = self.request.get('guestbook_name',
-                                          DEFAULT_GUESTBOOK_NAME)
-        greeting = Greeting(parent=guestbook_key(guestbook_name))
+        review_title = self.request.get('review_title',
+                                        DEFAULT_REVIEW_TITLE)
+        review = Review(parent=review_key(review_title))
 
         if users.get_current_user():
-            greeting.author = Author(
+            review.author = Author(
                     identity=users.get_current_user().user_id(),
                     email=users.get_current_user().email())
 
-        greeting.content = self.request.get('content')
-        greeting.put()
+        review.content = self.request.get('content')
+        review.put()
 
-        query_params = {'guestbook_name': guestbook_name}
+        query_params = {'review_title': review_title}
         self.redirect('/?' + urllib.urlencode(query_params))
 
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/sign', Guestbook),
+    ('/sign', Reviews),
 ], debug=True)

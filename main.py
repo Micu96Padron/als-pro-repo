@@ -27,7 +27,7 @@ class Game(ndb.Model):
     name = ndb.StringProperty()
     genre = ndb.StringProperty(indexed=False)
 
-class Greeting(ndb.Model):
+class Review(ndb.Model):
     author = ndb.StructuredProperty(Author)
     content = ndb.StringProperty(indexed=False)
     date = ndb.DateTimeProperty(auto_now_add=True)
@@ -38,8 +38,8 @@ class MainPage(webapp2.RequestHandler):
     def get(self):
         guestbook_name = self.request.get('guestbook_name',
                                           DEFAULT_GUESTBOOK_NAME)
-        greetings_query = Greeting.query(
-            ancestor=guestbook_key(guestbook_name)).order(-Greeting.date)
+        greetings_query = Review.query(
+            ancestor=guestbook_key(guestbook_name)).order(-Review.date)
         greetings = greetings_query.fetch(10)
 
         user = users.get_current_user()
@@ -67,7 +67,7 @@ class Guestbook(webapp2.RequestHandler):
     def post(self):
         guestbook_name = self.request.get('guestbook_name',
                                           DEFAULT_GUESTBOOK_NAME)
-        greeting = Greeting(parent=guestbook_key(guestbook_name))
+        greeting = Review(parent=guestbook_key(guestbook_name))
 
         if users.get_current_user():
             greeting.author = Author(

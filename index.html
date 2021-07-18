@@ -2,10 +2,8 @@
 {% autoescape true %}
 <html>
   <head>
-    <!-- [START css] -->
     <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.css">
     <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap-responsive.css">
-    <!-- [END css] -->
     <style type="text/css">
       body {
         padding-top: 40px;
@@ -41,7 +39,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" href="#">App Engine Guestbook</a>
+          <a class="brand" href="#">Game Reviews</a>
           <div class="nav-collapse collapse pull-right">
             <a href="{{ url|safe }}" class="btn">{{ url_linktext }}</a>
           </div>
@@ -49,7 +47,6 @@
       </div>
     </div>
     <div class="container">
-      <!-- [START greetings] -->
       {% for greeting in greetings %}
       <div class="row">
         {% if greeting.author %}
@@ -64,11 +61,10 @@
         <blockquote>{{ greeting.content }}</blockquote>
       </div>
       {% endfor %}
-      <!-- [END greetings] -->
 
       <form action="/sign?guestbook_name={{ guestbook_name }}" method="post">
         <div><textarea name="content" class="input-block-level" rows="3"></textarea></div>
-        <div><input type="submit" class="btn btn-large btn-primary" value="Sign Guestbook"></div>
+        <div><input type="submit" class="btn btn-large btn-primary" value="Review"></div>
       </form>
 
       <hr>
@@ -78,7 +74,6 @@
         <input type="submit" value="switch">
       </form>
 
-      <a href="{{ url|safe }}">{{ url_linktext }}</a>
     </div>
   </body>
 </html>

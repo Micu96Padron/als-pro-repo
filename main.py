@@ -16,17 +16,18 @@ DEFAULT_GUESTBOOK_NAME = 'default_guestbook'
 
 
 def guestbook_key(guestbook_name=DEFAULT_GUESTBOOK_NAME):
-    return ndb.Key('Guestbook', guestbook_name)
+    return ndb.Key('Game', guestbook_name)
 
 
 class Author(ndb.Model):
-    """Sub model for representing an author."""
     identity = ndb.StringProperty(indexed=False)
     email = ndb.StringProperty(indexed=False)
 
+class Game(ndb.Model):
+    name = ndb.StringProperty()
+    genre = ndb.StringProperty(indexed=False)
 
 class Greeting(ndb.Model):
-    """A main model for representing an individual Guestbook entry."""
     author = ndb.StructuredProperty(Author)
     content = ndb.StringProperty(indexed=False)
     date = ndb.DateTimeProperty(auto_now_add=True)

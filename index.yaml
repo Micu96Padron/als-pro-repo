@@ -4,3 +4,9 @@ indexes:
   properties:
   - name: date
     direction: desc
+
+- kind : Game
+  ancestor : yes
+  properties :
+    - name : name
+      direction : desc

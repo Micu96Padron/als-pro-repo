@@ -35,7 +35,7 @@ class Review(ndb.Model):
 def get_default_name():
     act_games = Game.query()
     if act_games.count() == 0:
-        game = Game(name=DEFAULT_GAME_NAME, genres=DEFAULT_GAME_GENRES)
+        game = Game(name=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRES)
         game.put()
         act_games = Game.query()
 

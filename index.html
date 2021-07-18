@@ -39,7 +39,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" href="#">Videogame Reviews</a>
+          <a class="brand" href="#">Game Reviews</a>
           <div class="nav-collapse collapse pull-right">
             <a href="{{ url|safe }}" class="btn">{{ url_linktext }}</a>
           </div>
@@ -47,7 +47,7 @@
       </div>
     </div>
     <div class="container">
-      {% for review in reviews %}
+      {% for greeting in greetings %}
       <div class="row">
         {% if review.author %}
           <b>{{ review.author.email }}
@@ -68,13 +68,11 @@
       </form>
 
       <hr>
-
-      <form>Review title:
-        <input value="{{ review_title }}" name="review_title">
+      <form>Game:
+        <input value="{{ guestbook_name }}" name="guestbook_name">
         <input type="submit" value="switch">
       </form>
 
-      <a href="{{ url|safe }}">{{ url_linktext }}</a>
     </div>
   </body>
 </html>

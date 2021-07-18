@@ -1,10 +1,11 @@
 import os
 import urllib
 
-import jinja2
-import webapp2
 from google.appengine.api import users
 from google.appengine.ext import ndb
+
+import jinja2
+import webapp2
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -12,14 +13,20 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
 
-DEFAULT_REVIEW_TITLE = 'default_review'
 
-def review_key(review_title=DEFAULT_REVIEW_TITLE):
-    return ndb.Key('Review', review_title)
+DEFAULT_GAME_NAME = 'The Legend of Zelda: Breath of the Wild'
+DEFAULT_GAME_GENRES = ['Action', 'Adventure']
+
 
 class Author(ndb.Model):
     identity = ndb.StringProperty(indexed=False)
     email = ndb.StringProperty(indexed=False)
+
+    
+class Game(ndb.Model):
+    name = ndb.StringProperty(required=True)
+    genre = ndb.StringProperty(repeated=True)
+
 
 class Review(ndb.Model):
     author = ndb.StructuredProperty(Author)
@@ -27,14 +34,31 @@ class Review(ndb.Model):
     date = ndb.DateTimeProperty(auto_now_add=True)
 
 
+def get_default_name():
+    act_games = Game.query()
+
+    if act_games.count() == 0:
+        game = Game(name=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRES)
+        game.put()
+        act_games = Game.query().fetch()
+
+    toret = act_games[0].name
+
+    return toret
+
+
+def guestbook_key(game_name=get_default_name()):
+    return ndb.Key('Game', game_name)
+
+
 class MainPage(webapp2.RequestHandler):
 
     def get(self):
-        review_title = self.request.get('review_title',
-                                       DEFAULT_REVIEW_TITLE)
-        review_query = Review.query(
-            ancestor=review_key(review_title)).order(-Review.date)
-        review = review_query.fetch(10)
+        guestbook_name = self.request.get('game_name',
+                                          DEFAULT_GAME_NAME)
+        greetings_query = Review.query(
+            ancestor=guestbook_key(guestbook_name)).order(-Review.date)
+        greetings = greetings_query.fetch(10)
 
         user = users.get_current_user()
         if user:
@@ -46,8 +70,8 @@ class MainPage(webapp2.RequestHandler):
 
         template_values = {
             'user': user,
-            'review': review,
-            'review_title': urllib.quote_plus(review_title),
+            'greetings': greetings,
+            'game_name': urllib.quote_plus(guestbook_name),
             'url': url,
             'url_linktext': url_linktext,
         }
@@ -55,26 +79,28 @@ class MainPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('index.html')
         self.response.write(template.render(template_values))
 
-class Reviews(webapp2.RequestHandler):
+
+class ReviewForum(webapp2.RequestHandler):
 
     def post(self):
-        review_title = self.request.get('review_title',
-                                        DEFAULT_REVIEW_TITLE)
-        review = Review(parent=review_key(review_title))
+        guestbook_name = self.request.get('game_name',
+                                          DEFAULT_GAME_NAME)
+        greeting = Review(parent=guestbook_key(guestbook_name))
 
         if users.get_current_user():
-            review.author = Author(
-                    identity=users.get_current_user().user_id(),
-                    email=users.get_current_user().email())
+            greeting.author = Author(
+                identity=users.get_current_user().user_id(),
+                email=users.get_current_user().email())
 
-        review.content = self.request.get('content')
-        review.put()
+        greeting.content = self.request.get('content')
+        greeting.put()
 
-        query_params = {'review_title': review_title}
+        query_params = {'game_name': guestbook_name}
+
         self.redirect('/?' + urllib.urlencode(query_params))
 
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/sign', Reviews),
+    ('/sign', ReviewForum),
 ], debug=True)

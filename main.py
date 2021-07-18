@@ -12,11 +12,17 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
 
-DEFAULT_GUESTBOOK_NAME = 'default_guestbook'
+def get_default_name():
+    toret = ''
+
+    return toret
 
 
-def guestbook_key(guestbook_name=DEFAULT_GUESTBOOK_NAME):
-    return ndb.Key('Game', guestbook_name)
+DEFAULT_GAME_NAME = get_default_name()
+
+
+def guestbook_key(game_name=DEFAULT_GAME_NAME):
+    return ndb.Key('Game', game_name)
 
 
 class Author(ndb.Model):
@@ -24,8 +30,8 @@ class Author(ndb.Model):
     email = ndb.StringProperty(indexed=False)
 
 class Game(ndb.Model):
-    name = ndb.StringProperty()
-    genre = ndb.StringProperty(indexed=False)
+    name = ndb.StringProperty(required=True)
+    genre = ndb.StringProperty(repeated=True)
 
 class Review(ndb.Model):
     author = ndb.StructuredProperty(Author)
@@ -36,8 +42,8 @@ class Review(ndb.Model):
 class MainPage(webapp2.RequestHandler):
 
     def get(self):
-        guestbook_name = self.request.get('guestbook_name',
-                                          DEFAULT_GUESTBOOK_NAME)
+        guestbook_name = self.request.get('game_name',
+                                          DEFAULT_GAME_NAME)
         greetings_query = Review.query(
             ancestor=guestbook_key(guestbook_name)).order(-Review.date)
         greetings = greetings_query.fetch(10)
@@ -53,7 +59,7 @@ class MainPage(webapp2.RequestHandler):
         template_values = {
             'user': user,
             'greetings': greetings,
-            'guestbook_name': urllib.quote_plus(guestbook_name),
+            'game_name': urllib.quote_plus(guestbook_name),
             'url': url,
             'url_linktext': url_linktext,
         }
@@ -62,11 +68,11 @@ class MainPage(webapp2.RequestHandler):
         self.response.write(template.render(template_values))
 
 
-class Guestbook(webapp2.RequestHandler):
+class ReviewForum(webapp2.RequestHandler):
 
     def post(self):
-        guestbook_name = self.request.get('guestbook_name',
-                                          DEFAULT_GUESTBOOK_NAME)
+        guestbook_name = self.request.get('game_name',
+                                          DEFAULT_GAME_NAME)
         greeting = Review(parent=guestbook_key(guestbook_name))
 
         if users.get_current_user():
@@ -77,11 +83,11 @@ class Guestbook(webapp2.RequestHandler):
         greeting.content = self.request.get('content')
         greeting.put()
 
-        query_params = {'guestbook_name': guestbook_name}
+        query_params = {'game_name': guestbook_name}
         self.redirect('/?' + urllib.urlencode(query_params))
 
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/sign', Guestbook),
+    ('/sign', ReviewForum),
 ], debug=True)

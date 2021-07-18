@@ -49,26 +49,25 @@
     <div class="container">
       {% for greeting in greetings %}
       <div class="row">
-        {% if greeting.author %}
-          <b>{{ greeting.author.email }}
-            {% if user and user.user_id() == greeting.author.identity %}
+        {% if review.author %}
+          <b>{{ review.author.email }}
+            {% if user and user.user_id() == review.author.identity %}
               (You)
             {% endif %}
           </b> wrote:
         {% else %}
           An anonymous person wrote:
         {% endif %}
-        <blockquote>{{ greeting.content }}</blockquote>
+        <blockquote>{{ review.content }}</blockquote>
       </div>
       {% endfor %}
 
-      <form action="/sign?guestbook_name={{ guestbook_name }}" method="post">
+      <form action="/sign?review_title={{ review_title }}" method="post">
         <div><textarea name="content" class="input-block-level" rows="3"></textarea></div>
         <div><input type="submit" class="btn btn-large btn-primary" value="Review"></div>
       </form>
 
       <hr>
-
       <form>Game:
         <input value="{{ guestbook_name }}" name="guestbook_name">
         <input type="submit" value="switch">

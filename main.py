@@ -7,10 +7,12 @@ from google.appengine.ext import ndb
 import jinja2
 import webapp2
 
+
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
+
 
 DEFAULT_GAME_NAME = 'The Legend of Zelda: Breath of the Wild'
 DEFAULT_GAME_GENRES = ['Action', 'Adventure']
@@ -20,7 +22,7 @@ class Author(ndb.Model):
     identity = ndb.StringProperty(indexed=False)
     email = ndb.StringProperty(indexed=False)
 
-
+    
 class Game(ndb.Model):
     name = ndb.StringProperty(required=True)
     genre = ndb.StringProperty(repeated=True)
@@ -94,6 +96,7 @@ class ReviewForum(webapp2.RequestHandler):
         greeting.put()
 
         query_params = {'game_name': guestbook_name}
+
         self.redirect('/?' + urllib.urlencode(query_params))
 
 

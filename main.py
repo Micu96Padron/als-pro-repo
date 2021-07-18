@@ -16,22 +16,6 @@ DEFAULT_GAME_NAME = 'The Legend of Zelda: Breath of the Wild'
 DEFAULT_GAME_GENRES = ['Action', 'Adventure']
 
 
-def get_default_name():
-    act_games = Game.query()
-    if act_games.count() == 0:
-        game = Game(name=DEFAULT_GAME_NAME, genres=DEFAULT_GAME_GENRES)
-        game.put()
-        act_games = Game.query()
-
-    toret = act_games[0].name
-
-    return toret
-
-
-def guestbook_key(game_name=get_default_name()):
-    return ndb.Key('Game', game_name)
-
-
 class Author(ndb.Model):
     identity = ndb.StringProperty(indexed=False)
     email = ndb.StringProperty(indexed=False)
@@ -46,6 +30,22 @@ class Review(ndb.Model):
     author = ndb.StructuredProperty(Author)
     content = ndb.StringProperty(indexed=False)
     date = ndb.DateTimeProperty(auto_now_add=True)
+
+
+def get_default_name():
+    act_games = Game.query()
+    if act_games.count() == 0:
+        game = Game(name=DEFAULT_GAME_NAME, genres=DEFAULT_GAME_GENRES)
+        game.put()
+        act_games = Game.query()
+
+    toret = act_games[0].name
+
+    return toret
+
+
+def guestbook_key(game_name=get_default_name()):
+    return ndb.Key('Game', game_name)
 
 
 class MainPage(webapp2.RequestHandler):

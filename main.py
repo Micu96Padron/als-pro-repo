@@ -14,7 +14,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 
-DEFAULT_GAME_NAME = 'The Legend of Zelda: Breath of the Wild'
+DEFAULT_GAME_NAME = "The Legend of Zelda: Breath of the Wild"
 DEFAULT_GAME_GENRES = ['Action', 'Adventure']
 
 
@@ -29,36 +29,18 @@ class Game(ndb.Model):
 
 
 class Review(ndb.Model):
+    game = ndb.StructuredProperty(Game)
     author = ndb.StructuredProperty(Author)
     content = ndb.StringProperty(indexed=False)
     date = ndb.DateTimeProperty(auto_now_add=True)
 
 
-def get_default_name():
-    act_games = Game.query()
-
-    if act_games.count() == 0:
-        game = Game(name=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRES)
-        game.put()
-        act_games = Game.query().fetch()
-
-    toret = act_games[0].name
-
-    return toret
-
-
-def guestbook_key(game_name=get_default_name()):
-    return ndb.Key('Game', game_name)
-
-
 class MainPage(webapp2.RequestHandler):
 
     def get(self):
-        guestbook_name = self.request.get('game_name',
-                                          DEFAULT_GAME_NAME)
-        greetings_query = Review.query(
-            ancestor=guestbook_key(guestbook_name)).order(-Review.date)
-        greetings = greetings_query.fetch(10)
+        game_name = self.request.get('game_name', DEFAULT_GAME_NAME)
+        review_query = Review.query.order(-Review.date)
+        forum = review_query.fetch(10)
 
         user = users.get_current_user()
         if user:
@@ -70,8 +52,8 @@ class MainPage(webapp2.RequestHandler):
 
         template_values = {
             'user': user,
-            'greetings': greetings,
-            'game_name': urllib.quote_plus(guestbook_name),
+            'forum': forum,
+            'game_name': urllib.quote_plus(game_name),
             'url': url,
             'url_linktext': url_linktext,
         }
@@ -83,19 +65,18 @@ class MainPage(webapp2.RequestHandler):
 class ReviewForum(webapp2.RequestHandler):
 
     def post(self):
-        guestbook_name = self.request.get('game_name',
-                                          DEFAULT_GAME_NAME)
-        greeting = Review(parent=guestbook_key(guestbook_name))
+        game_name = self.request.get('game_name', DEFAULT_GAME_NAME)
+        review = Review(game_name)
 
         if users.get_current_user():
-            greeting.author = Author(
+            review.author = Author(
                 identity=users.get_current_user().user_id(),
                 email=users.get_current_user().email())
 
-        greeting.content = self.request.get('content')
-        greeting.put()
+        review.content = self.request.get('content')
+        review.put()
 
-        query_params = {'game_name': guestbook_name}
+        query_params = {'game_name': game_name}
 
         self.redirect('/?' + urllib.urlencode(query_params))
 

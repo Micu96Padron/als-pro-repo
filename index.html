@@ -47,7 +47,7 @@
       </div>
     </div>
     <div class="container">
-      {% for greeting in greetings %}
+      {% for review in forum %}
       <div class="row">
         {% if review.author %}
           <b>{{ review.author.email }}
@@ -62,14 +62,14 @@
       </div>
       {% endfor %}
 
-      <form action="/sign?review_title={{ review_title }}" method="post">
+      <form action="/sign?game_name={{ game_name }}" method="post">
         <div><textarea name="content" class="input-block-level" rows="3"></textarea></div>
         <div><input type="submit" class="btn btn-large btn-primary" value="Review"></div>
       </form>
 
       <hr>
       <form>Game:
-        <input value="{{ guestbook_name }}" name="guestbook_name">
+        <input value="{{ game_name }}" name="game_name">
         <input type="submit" value="switch">
       </form>
 

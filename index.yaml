@@ -6,7 +6,7 @@ indexes:
     direction: desc
 
 - kind : Game
-  ancestor : yes
+  ancestor : no
   properties :
     - name : name
       direction : desc

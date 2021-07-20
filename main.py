@@ -30,11 +30,9 @@ class Review(ndb.Model):
 
 
 class Game(ndb.Model):
+    reviews = ndb.StructuredProperty(Review, repeated=True)
     name = ndb.StringProperty(required=True)
     genre = ndb.StringProperty(repeated=True)
-    reviews = ndb.StructuredProperty(Review, repeated=True)
-
-
 
 
 class MainPage(webapp2.RequestHandler):
@@ -43,7 +41,7 @@ class MainPage(webapp2.RequestHandler):
         game_name = self.request.get('game_name', DEFAULT_GAME_NAME)
 
         if (game_name is DEFAULT_GAME_NAME) and (Game.query().get() is None):
-            game = Game(name=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRES)
+            game = Game(name=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRES, reviews = [])
             game.put()
 
         review_query = Review.query()

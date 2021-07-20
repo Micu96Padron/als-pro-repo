@@ -45,7 +45,7 @@ class MainPage(webapp2.RequestHandler):
             game.put()
 
         game = Game.query(Game.name == game_name).get()
-        reviews = game.reviews.query().fetch(10)
+        reviews = game.reviews
 
         user = users.get_current_user()
 

@@ -35,17 +35,14 @@ class Review(ndb.Model):
     date = ndb.DateTimeProperty(auto_now_add=True)
 
 
-def checkdefaultexistance(game_name):
-    if (game_name is DEFAULT_GAME_NAME) and (Game.query().fetch() is None):
-        game = Game(name=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRES)
-        game.put()
-
-
 class MainPage(webapp2.RequestHandler):
 
     def get(self):
         game_name = self.request.get('game_name', DEFAULT_GAME_NAME)
-        checkdefaultexistance(game_name)
+
+        if (game_name is DEFAULT_GAME_NAME) and (Game.query().fetch is None):
+            game = Game(name=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRES)
+            game.put()
 
         review_query = Review.query()
         forum = review_query.fetch(10)
@@ -75,9 +72,7 @@ class ReviewForum(webapp2.RequestHandler):
 
     def post(self):
         game_name = self.request.get('game_name', DEFAULT_GAME_NAME)
-        checkdefaultexistance(game_name)
-
-        review = Review.query(Review.game.name.IN(game_name)).fetch()
+        review = Review.query(Review.game.name.IN(game_name)).fetch()[0]
 
         if users.get_current_user():
             review.author = Author(

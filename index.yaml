@@ -1,12 +1,1 @@
 indexes:
-- kind: Review
-  ancestor: yes
-  properties:
-  - name: date
-    direction: desc
-
-- kind : Game
-  ancestor : no
-  properties :
-    - name : name
-      direction : desc

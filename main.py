@@ -39,10 +39,11 @@ class MainPage(webapp2.RequestHandler):
 
     def get(self):
         game_name = self.request.get('game_name', DEFAULT_GAME_NAME)
-        review_query = Review.query.order(-Review.date)
+        review_query = Review.query()
         forum = review_query.fetch(10)
 
         user = users.get_current_user()
+
         if user:
             url = users.create_logout_url(self.request.uri)
             url_linktext = 'Logout'
@@ -53,7 +54,7 @@ class MainPage(webapp2.RequestHandler):
         template_values = {
             'user': user,
             'forum': forum,
-            'game_name': urllib.quote_plus(game_name),
+            'game_name': game_name,
             'url': url,
             'url_linktext': url_linktext,
         }
@@ -66,7 +67,7 @@ class ReviewForum(webapp2.RequestHandler):
 
     def post(self):
         game_name = self.request.get('game_name', DEFAULT_GAME_NAME)
-        review = Review(game_name)
+        review = Review.query(Review.game.name.IN(game_name)).fetch()
 
         if users.get_current_user():
             review.author = Author(

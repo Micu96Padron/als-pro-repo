@@ -72,6 +72,11 @@ class ReviewForum(webapp2.RequestHandler):
 
     def post(self):
         game_name = self.request.get('game_name', DEFAULT_GAME_NAME)
+
+        if game_name is DEFAULT_GAME_NAME:
+            game = Game(name=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRES)
+            game.put()
+
         review = Review.query(Review.game.name.IN(game_name)).fetch()
 
         if users.get_current_user():

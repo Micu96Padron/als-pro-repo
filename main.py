@@ -77,7 +77,7 @@ class ReviewForum(webapp2.RequestHandler):
             game = Game(name=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRES)
             game.put()
 
-        review = Review.query(Review.game.name.IN(game_name)).fetch()[0]
+        review = Review()
 
         if users.get_current_user():
             review.author = Author(

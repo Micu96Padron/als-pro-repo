@@ -41,11 +41,11 @@ class MainPage(webapp2.RequestHandler):
         game_name = self.request.get('game_name', DEFAULT_GAME_NAME)
 
         if (game_name is DEFAULT_GAME_NAME) and (Game.query().get() is None):
-            game = Game(name=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRES, reviews = [])
+            game = Game(name=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRES, reviews=[])
             game.put()
 
-        review_query = Review.query()
-        forum = review_query.fetch(10)
+        game = Game.query(Game.name == game_name).get()
+        reviews = game.reviews.query().fetch(10)
 
         user = users.get_current_user()
 
@@ -58,7 +58,7 @@ class MainPage(webapp2.RequestHandler):
 
         template_values = {
             'user': user,
-            'forum': forum,
+            'reviews': reviews,
             'game_name': game_name,
             'url': url,
             'url_linktext': url_linktext,
@@ -74,7 +74,7 @@ class ReviewForum(webapp2.RequestHandler):
         game_name = self.request.get('game_name', DEFAULT_GAME_NAME)
 
         if (game_name is DEFAULT_GAME_NAME) and (Game.query().get() is None):
-            game = Game(name=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRES)
+            game = Game(name=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRES, reviews=[])
             game.put()
 
         review = Review()
@@ -84,10 +84,10 @@ class ReviewForum(webapp2.RequestHandler):
                 identity=users.get_current_user().user_id(),
                 email=users.get_current_user().email())
 
-        review.game = Game.query(Game.name == game_name).get()
-
         review.content = self.request.get('content')
-        review.put()
+        game = Game.query(Game.name == game_name).get()
+        game.reviews = game.reviews + review
+        game.put()
 
         query_params = {'game_name': game_name}
 

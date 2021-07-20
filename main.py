@@ -40,7 +40,7 @@ class MainPage(webapp2.RequestHandler):
     def get(self):
         game_name = self.request.get('game_name', DEFAULT_GAME_NAME)
 
-        if (game_name is DEFAULT_GAME_NAME) and (Game.query().fetch is None):
+        if (game_name is DEFAULT_GAME_NAME) and (Game.query().get() is None):
             game = Game(name=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRES)
             game.put()
 
@@ -72,6 +72,11 @@ class ReviewForum(webapp2.RequestHandler):
 
     def post(self):
         game_name = self.request.get('game_name', DEFAULT_GAME_NAME)
+
+        if (game_name is DEFAULT_GAME_NAME) and (Game.query().get() is None):
+            game = Game(name=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRES)
+            game.put()
+
         review = Review.query(Review.game.name.IN(game_name)).fetch()[0]
 
         if users.get_current_user():

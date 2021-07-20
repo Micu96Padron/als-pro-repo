@@ -14,7 +14,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 
-DEFAULT_GAME_NAME = "The Legend of Zelda: Breath of the Wild"
+DEFAULT_GAME_NAME = "TLOZ: Breath of the Wild"
 DEFAULT_GAME_GENRES = ['Action', 'Adventure']
 
 
@@ -59,7 +59,7 @@ class MainPage(webapp2.RequestHandler):
         template_values = {
             'user': user,
             'forum': forum,
-            'game_name': urllib.quote_plus(game_name),
+            'game_name': game_name,
             'url': url,
             'url_linktext': url_linktext,
         }
@@ -83,6 +83,8 @@ class ReviewForum(webapp2.RequestHandler):
             review.author = Author(
                 identity=users.get_current_user().user_id(),
                 email=users.get_current_user().email())
+
+        review.game = Game.query(Game.name == game_name).get()
 
         review.content = self.request.get('content')
         review.put()

@@ -22,17 +22,19 @@ class Author(ndb.Model):
     identity = ndb.StringProperty(indexed=False)
     email = ndb.StringProperty(indexed=False)
 
-    
-class Game(ndb.Model):
-    name = ndb.StringProperty(required=True)
-    genre = ndb.StringProperty(repeated=True)
-
 
 class Review(ndb.Model):
-    game = ndb.StructuredProperty(Game)
     author = ndb.StructuredProperty(Author)
     content = ndb.StringProperty(indexed=False)
     date = ndb.DateTimeProperty(auto_now_add=True)
+
+
+class Game(ndb.Model):
+    name = ndb.StringProperty(required=True)
+    genre = ndb.StringProperty(repeated=True)
+    reviews = ndb.StructuredProperty(Review, repeated=True)
+
+
 
 
 class MainPage(webapp2.RequestHandler):

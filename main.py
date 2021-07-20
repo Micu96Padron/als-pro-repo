@@ -39,6 +39,11 @@ class MainPage(webapp2.RequestHandler):
 
     def get(self):
         game_name = self.request.get('game_name', DEFAULT_GAME_NAME)
+
+        if game_name is DEFAULT_GAME_NAME:
+            game = Game(name=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRES)
+            game.put()
+
         review_query = Review.query()
         forum = review_query.fetch(10)
 

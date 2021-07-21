@@ -35,7 +35,7 @@ class Review(ndb.Model):
 
 class Game(ndb.Model):
     name = ndb.StringProperty()
-    genre = ndb.StringProperty(repeated=True)
+    genre = ndb.StringProperty(indexed=False)
 
 
 class MainPage(webapp2.RequestHandler):

@@ -1,4 +1,3 @@
-
 import os
 import urllib
 
@@ -8,6 +7,7 @@ from google.appengine.ext import ndb
 import jinja2
 import webapp2
 
+
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'],
@@ -15,18 +15,10 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 
 DEFAULT_GAME_NAME = "TLOZ: Breath of the Wild"
+DEFAULT_GAME_GENRES = ['Action', 'Adventure']
 
-
-# We set a parent key on the 'Greetings' to ensure that they are all
-# in the same entity group. Queries across the single entity group
-# will be consistent. However, the write rate should be limited to
-# ~1/second.
 
 def game_key(game_name=DEFAULT_GAME_NAME):
-    """Constructs a Datastore key for a GameReview entity.
-
-    We use guestbook_name as the key.
-    """
     return ndb.Key('Game', game_name)
 
 
@@ -39,6 +31,12 @@ class Review(ndb.Model):
     author = ndb.StructuredProperty(Author)
     content = ndb.StringProperty(indexed=False)
     date = ndb.DateTimeProperty(auto_now_add=True)
+
+
+class Game(ndb.Model):
+    name = ndb.StringProperty()
+    genre = ndb.StringProperty(repeated=True)
+    score = ndb.IntegerProperty(indexed=False)
 
 
 class MainPage(webapp2.RequestHandler):
@@ -91,8 +89,19 @@ class GameReview(webapp2.RequestHandler):
         self.redirect('/?' + urllib.urlencode(query_params))
 
 
+class AddGame(webapp2.RequestHandler):
+
+    def post(self):
+        pass
+
+
+
+
+
+
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/sign', GameReview),
+    ('/sign/addgame', AddGame)
 ], debug=True)
 

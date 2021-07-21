@@ -39,7 +39,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" href="#">App Engine GameReview</a>
+          <a class="brand" href="#">App Engine Game Reviews</a>
           <div class="nav-collapse collapse pull-right">
             <a href="{{ url|safe }}" class="btn">{{ url_linktext }}</a>
           </div>
@@ -71,6 +71,20 @@
 
       <form>Game name:
         <input value="{{ game_name }}" name="game_name">
+
+      </form>
+
+      <form>Change game:
+        <div class="form-group">
+          <label for="exampleFormControlSelect1">Example select</label>
+            <select class="form-control" id="exampleFormControlSelect1" name="game_name">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+        </div>
         <input type="submit" value="switch">
       </form>
 

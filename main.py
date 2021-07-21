@@ -86,6 +86,7 @@ class GameReview(webapp2.RequestHandler):
         query_params = {'game_name': game_name}
         self.redirect('/?' + urllib.urlencode(query_params))
 
+
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/sign', GameReview),

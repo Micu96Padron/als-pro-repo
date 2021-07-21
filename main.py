@@ -30,7 +30,7 @@ class Review(ndb.Model):
 
 
 class Game(ndb.Model):
-    reviews = ndb.StructuredProperty(Review, repeated=True)
+    review_keys = ndb.KeyProperty(repeated=True)
     name = ndb.StringProperty(required=True)
     genre = ndb.StringProperty(repeated=True)
 
@@ -41,11 +41,11 @@ class MainPage(webapp2.RequestHandler):
         game_name = self.request.get('game_name', DEFAULT_GAME_NAME)
 
         if (game_name is DEFAULT_GAME_NAME) and (Game.query().get() is None):
-            game = Game(name=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRES, reviews=[])
+            game = Game(name=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRES, review_keys=[])
             game.put()
 
         game = Game.query(Game.name == game_name).get()
-        reviews = game.reviews
+        reviews = game.review_keys
 
         user = users.get_current_user()
 
@@ -58,7 +58,7 @@ class MainPage(webapp2.RequestHandler):
 
         template_values = {
             'user': user,
-            'reviews': reviews,
+            'review_keys': reviews,
             'game_name': game_name,
             'url': url,
             'url_linktext': url_linktext,
@@ -85,9 +85,9 @@ class ReviewForum(webapp2.RequestHandler):
                 email=users.get_current_user().email())
 
         review.content = self.request.get('content')
-        key = review.put()
+        review_key = review.put()
         game = Game.query(Game.name == game_name).get()
-        game.reviews.append(key.get())
+        game.review_keys.append(review_key.get())
         game.put()
 
         query_params = {'game_name': game_name}

@@ -23,7 +23,7 @@ DEFAULT_GAME_NAME = "TLOZ: Breath of the Wild"
 # ~1/second.
 
 def game_key(game_name=DEFAULT_GAME_NAME):
-    """Constructs a Datastore key for a GamesReview entity.
+    """Constructs a Datastore key for a GameReview entity.
 
     We use guestbook_name as the key.
     """
@@ -71,7 +71,7 @@ class MainPage(webapp2.RequestHandler):
         self.response.write(template.render(template_values))
 
 
-class GamesReview(webapp2.RequestHandler):
+class GameReview(webapp2.RequestHandler):
 
     def post(self):
         game_name = self.request.get('game_name',
@@ -93,6 +93,6 @@ class GamesReview(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/sign', GamesReview),
+    ('/sign', GameReview),
 ], debug=True)
 

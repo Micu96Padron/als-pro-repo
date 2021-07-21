@@ -2,10 +2,8 @@
 {% autoescape true %}
 <html>
   <head>
-    <!-- [START css] -->
     <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.css">
     <link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap-responsive.css">
-    <!-- [END css] -->
     <style type="text/css">
       body {
         padding-top: 40px;
@@ -41,7 +39,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" href="#">App Engine Guestbook</a>
+          <a class="brand" href="#">App Engine GameReview</a>
           <div class="nav-collapse collapse pull-right">
             <a href="{{ url|safe }}" class="btn">{{ url_linktext }}</a>
           </div>
@@ -49,32 +47,30 @@
       </div>
     </div>
     <div class="container">
-      <!-- [START greetings] -->
-      {% for greeting in greetings %}
+      {% for review in reviews %}
       <div class="row">
-        {% if greeting.author %}
-          <b>{{ greeting.author.email }}
-            {% if user and user.user_id() == greeting.author.identity %}
+        {% if review.author %}
+          <b>{{ review.author.email }}
+            {% if user and user.user_id() == review.author.identity %}
               (You)
             {% endif %}
           </b> wrote:
         {% else %}
           An anonymous person wrote:
         {% endif %}
-        <blockquote>{{ greeting.content }}</blockquote>
+        <blockquote>{{ review.content }}</blockquote>
       </div>
       {% endfor %}
-      <!-- [END greetings] -->
 
-      <form action="/sign?guestbook_name={{ guestbook_name }}" method="post">
+      <form action="/sign?game_name={{ game_name }}" method="post">
         <div><textarea name="content" class="input-block-level" rows="3"></textarea></div>
-        <div><input type="submit" class="btn btn-large btn-primary" value="Sign Guestbook"></div>
+        <div><input type="submit" class="btn btn-large btn-primary" value="Review"></div>
       </form>
 
       <hr>
 
-      <form>Guestbook name:
-        <input value="{{ guestbook_name }}" name="guestbook_name">
+      <form>GameReview name:
+        <input value="{{ game_name }}" name="game_name">
         <input type="submit" value="switch">
       </form>
 

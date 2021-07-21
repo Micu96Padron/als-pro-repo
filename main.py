@@ -62,7 +62,7 @@ class MainPage(webapp2.RequestHandler):
         template_values = {
             'user': user,
             'reviews': reviews,
-            'game_name': urllib.quote_plus(game_name),
+            'game_name': game_name,
             'url': url,
             'url_linktext': url_linktext,
         }

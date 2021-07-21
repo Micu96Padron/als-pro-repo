@@ -76,7 +76,7 @@
 
       <form>Change game:
         <div class="form-group">
-          <label for="exampleFormControlSelect1">Example select</label>
+          <label for="exampleFormControlSelect1"></label>
             <select class="form-control" id="exampleFormControlSelect1" name="game_name">
               <option>1</option>
               <option>2</option>
@@ -85,10 +85,12 @@
               <option>5</option>
             </select>
         </div>
-        <input type="submit" value="switch">
+        <input type="submit" value="Switch">
       </form>
 
-      <a href="{{ url|safe }}">{{ url_linktext }}</a>
+      <hr>
+
+      <a class="btn btn-primary" href="/addgame" role="button">Add Game</a>
     </div>
   </body>
 </html>

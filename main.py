@@ -36,7 +36,6 @@ class Review(ndb.Model):
 class Game(ndb.Model):
     name = ndb.StringProperty()
     genre = ndb.StringProperty(repeated=True)
-    score = ndb.IntegerProperty(indexed=False)
 
 
 class MainPage(webapp2.RequestHandler):
@@ -102,6 +101,6 @@ class AddGame(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/sign', GameReview),
-    ('/sign/addgame', AddGame)
+    ('/addgame', AddGame)
 ], debug=True)
 

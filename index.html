@@ -39,7 +39,9 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" href="#">App Engine GameReview</a>
+
+          <a class="brand" href="#">GAE Game Reviews</a>
+
           <div class="nav-collapse collapse pull-right">
             <a href="{{ url|safe }}" class="btn">{{ url_linktext }}</a>
           </div>
@@ -69,12 +71,31 @@
 
       <hr>
 
-      <form>Game name:
-        <input value="{{ game_name }}" name="game_name">
-        <input type="submit" value="switch">
+      <form class="form-inline">
+        <div class="form-group mb-2">
+          <label for="staticGameName" class="sr-only">Current game: </label>
+          <input type="text" readonly class="form-control-plaintext" id="staticGameName" value="{{ game_name }}">
+        </div>
       </form>
 
-      <a href="{{ url|safe }}">{{ url_linktext }}</a>
+      <form>Change game
+        <div class="form-group">
+          <label for="changeGame"></label>
+            <select class="form-control" id="changeGame" name="game_name">
+              <option selected disabled hidden style='display: none' value=''></option>
+              <option>2</option>
+
+            </select>
+        </div>
+        <div class="ae-button-submit">
+          <input type="submit" value="Switch">
+        </div>
+      </form>
+
+      <hr>
+
+      <a class="btn btn-primary btn-large" href="#" role="button">Add New Game</a>
+
     </div>
   </body>
 </html>

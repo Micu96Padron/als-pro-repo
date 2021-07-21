@@ -1,13 +1,11 @@
-# Google App Engine Proyect
+# Google App Engine, Proyecto de ALS
 
-Consiste en una datastore que almacena juegos, reseñas, y los autores de estas.
+@author: Miguel Ángel Padrón López
 
-El enunciado sería:
+Consiste en una datastore que almacena juegos, y reseñas de estos. Diferenciadas por autoría utilizando como herramienta de autenticación Google Accounts.
 
-Videogames Review App en la que los usuarios pueden añadir juegos, 
-y/o escribir reseñas/comentarios sobre los existentes en la app.
+============================================================================
 
-Contiene gestión de usuarios mediante google accounts, formularios para añadir nuevos juegos 
-y almacenamiento y gestión de reseñas mediante un Datastore.
-También permite hallar la nota media para un juego entre todas las reseñas escritas respecto a este.
-(similar a Metacritic)
+GAE Games Reviews es una aplicación en la que los usuarios pueden añadir juegos, y/o escribir reseñas/comentarios sobre los existentes en la app.
+
+Contiene gestión de usuarios mediante Google Accounts, formularios para añadir nuevos juegos y nuevas reseñas, y almacenamiento y gestión de estas utilizando Datastore.

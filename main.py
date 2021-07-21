@@ -1,3 +1,4 @@
+
 import os
 import urllib
 
@@ -7,7 +8,6 @@ from google.appengine.ext import ndb
 import jinja2
 import webapp2
 
-
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'],
@@ -15,7 +15,14 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 
 DEFAULT_GAME_NAME = "TLOZ: Breath of the Wild"
-DEFAULT_GAME_GENRES = ['Action', 'Adventure']
+
+
+def game_key(game_name=DEFAULT_GAME_NAME):
+    """Constructs a Datastore key for a GameReview entity.
+
+    We use guestbook_name as the key.
+    """
+    return ndb.Key('Game', game_name)
 
 
 def game_key(game_name=DEFAULT_GAME_NAME):
@@ -92,11 +99,6 @@ class AddGame(webapp2.RequestHandler):
 
     def post(self):
         pass
-
-
-
-
-
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),

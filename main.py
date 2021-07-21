@@ -15,14 +15,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 
 DEFAULT_GAME_NAME = "TLOZ: Breath of the Wild"
-
-
-def game_key(game_name=DEFAULT_GAME_NAME):
-    """Constructs a Datastore key for a GameReview entity.
-
-    We use guestbook_name as the key.
-    """
-    return ndb.Key('Game', game_name)
+DEFAULT_GAME_GENRES = ['Action', 'Adventure']
 
 
 def game_key(game_name=DEFAULT_GAME_NAME):
@@ -99,6 +92,11 @@ class AddGame(webapp2.RequestHandler):
 
     def post(self):
         pass
+
+
+
+
+
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),

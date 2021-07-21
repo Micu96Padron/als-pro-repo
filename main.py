@@ -42,6 +42,9 @@ class MainPage(webapp2.RequestHandler):
     def get(self):
         game_name = self.request.get('game_name', DEFAULT_GAME_NAME)
 
+        if Game.query().get() is None:
+            game = Game()
+
         review_query = Review.query(ancestor=game_key(game_name)).order(-Review.date)
         reviews = review_query.fetch(10)
 

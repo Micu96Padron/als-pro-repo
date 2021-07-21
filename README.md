@@ -1,4 +1,4 @@
-# Google App Engine Proyect ALS
+# Google App Engine, Proyecto de ALS
 
 @author: Miguel Ángel Padrón López
 

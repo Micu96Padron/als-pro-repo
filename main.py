@@ -15,7 +15,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 
 DEFAULT_GAME_NAME = "TLOZ: Breath of the Wild"
-DEFAULT_GAME_GENRES = ['Action', 'Adventure']
+DEFAULT_GAME_GENRE = "Action, Adventure"
 
 
 def game_key(game_name=DEFAULT_GAME_NAME):

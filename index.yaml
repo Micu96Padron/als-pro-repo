@@ -1,1 +1,6 @@
 indexes:
+- kind: Review
+  ancestor: yes
+  properties:
+  - name: date
+    direction: desc

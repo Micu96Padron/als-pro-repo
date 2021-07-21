@@ -39,7 +39,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="brand" href="#">Game Reviews</a>
+          <a class="brand" href="#">App Engine GameReview</a>
           <div class="nav-collapse collapse pull-right">
             <a href="{{ url|safe }}" class="btn">{{ url_linktext }}</a>
           </div>
@@ -47,7 +47,7 @@
       </div>
     </div>
     <div class="container">
-      {% for review in forum %}
+      {% for review in reviews %}
       <div class="row">
         {% if review.author %}
           <b>{{ review.author.email }}
@@ -68,11 +68,13 @@
       </form>
 
       <hr>
-      <form>Game:
+
+      <form>Game name:
         <input value="{{ game_name }}" name="game_name">
         <input type="submit" value="switch">
       </form>
 
+      <a href="{{ url|safe }}">{{ url_linktext }}</a>
     </div>
   </body>
 </html>

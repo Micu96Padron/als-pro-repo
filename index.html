@@ -63,7 +63,7 @@
       </div>
       {% endfor %}
 
-      <form action="/sign?game_name={{ game_name }}" method="post">
+      <form action="/review?game_name={{ game_name }}" method="post">
         <div><textarea name="content" class="input-block-level" rows="3"></textarea></div>
         <div><input type="submit" class="btn btn-large btn-primary" value="Review"></div>
       </form>
@@ -91,14 +91,14 @@
       <hr>
     </div>
     <div class="container">
-      <form id="frmInput" action="/addgame" method="post">
+      <form id="frmInput" action="/add" method="post">
         <div class="form-group">
-          <label for="addName">Name</label>
-          <input type="text" class="form-control" id="addName" placeholder="Final Fantasy XIV">
-          <label for="addGenre">Genre</label>
-          <input type="text" class="form-control" id="addGenre" placeholder="MMORPG">
+          <label for="game_name">Name</label>
+          <input type="text" class="form-control" id="game_name" placeholder="Final Fantasy XIV">
+          <label for="genre">Genre</label>
+          <input type="text" class="form-control" id="genre" placeholder="MMORPG">
         </div>
-            <a class="btn btn-primary btn-large" href="#" role="button">Add New Game</a>
+            <div><input type="submit" class="btn btn-large btn-primary" value="Add Game"></div>
       </form>
     </div>
   </body>

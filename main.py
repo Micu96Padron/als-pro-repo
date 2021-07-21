@@ -40,8 +40,7 @@ class Game(ndb.Model):
 class MainPage(webapp2.RequestHandler):
 
     def get(self):
-        game_name = self.request.get('game_name',
-                                     DEFAULT_GAME_NAME)
+        game_name = self.request.get('game_name', DEFAULT_GAME_NAME)
 
         review_query = Review.query(ancestor=game_key(game_name)).order(-Review.date)
         reviews = review_query.fetch(10)
@@ -70,8 +69,7 @@ class MainPage(webapp2.RequestHandler):
 class GameReview(webapp2.RequestHandler):
 
     def post(self):
-        game_name = self.request.get('game_name',
-                                     DEFAULT_GAME_NAME)
+        game_name = self.request.get('game_name', DEFAULT_GAME_NAME)
 
         review = Review(parent=game_key(game_name))
 
@@ -87,7 +85,18 @@ class GameReview(webapp2.RequestHandler):
         self.redirect('/?' + urllib.urlencode(query_params))
 
 
+class AddGame(webapp2.RequestHandler):
+
+    def post(self):
+        game_name = self.request.get('game_name')
+
+        game = Game(id=game_name)
+        game.genre = self.request.get('genre')
+        game.put()
+
+
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/sign', GameReview),
+    ('/review', GameReview),
+    ('/add', AddGame)
 ], debug=True)

@@ -69,10 +69,11 @@
 
       <hr>
 
-      <form>Current game:
-        <label>
-          <input class="form-control" name="game_name" type="text" placeholder="{{ game_name }}" readonly>
-        </label>
+      <form class="form-inline">
+        <div class="form-group mb-2">
+          <label for="staticGameName" class="sr-only">Current game</label>
+          <input type="text" readonly class="form-control-plaintext" id="staticGameName" value="{{ game_name }}">
+        </div>
       </form>
 
       <form>Change game

@@ -92,8 +92,13 @@
 
       <hr>
 
-      <a class="btn btn-primary btn-large" href="#" role="button">Add New Game</a>
-
+      <form id="frmInput" action="/addgame" method="post">
+        <div class="form-group">
+          <label for="exampleFormControlInput1">Email address</label>
+          <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+        </div>
+            <a class="btn btn-primary btn-large" href="#" role="button">Add New Game</a>
+      </form>
     </div>
   </body>
 </html>

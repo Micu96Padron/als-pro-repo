@@ -1,3 +1,4 @@
+
 import os
 import urllib
 
@@ -7,7 +8,6 @@ from google.appengine.ext import ndb
 import jinja2
 import webapp2
 
-
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'],
@@ -15,21 +15,27 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 
 DEFAULT_GAME_NAME = "TLOZ: Breath of the Wild"
-DEFAULT_GAME_GENRES = ['Action', 'Adventure']
+
+
+# We set a parent key on the 'Greetings' to ensure that they are all
+# in the same entity group. Queries across the single entity group
+# will be consistent. However, the write rate should be limited to
+# ~1/second.
+
+def game_key(game_name=DEFAULT_GAME_NAME):
+    """Constructs a Datastore key for a GameReview entity.
+
+    We use guestbook_name as the key.
+    """
+    return ndb.Key('Game', game_name)
 
 
 class Author(ndb.Model):
     identity = ndb.StringProperty(indexed=False)
     email = ndb.StringProperty(indexed=False)
 
-    
-class Game(ndb.Model):
-    name = ndb.StringProperty(required=True)
-    genre = ndb.StringProperty(repeated=True)
-
 
 class Review(ndb.Model):
-    game = ndb.StructuredProperty(Game)
     author = ndb.StructuredProperty(Author)
     content = ndb.StringProperty(indexed=False)
     date = ndb.DateTimeProperty(auto_now_add=True)
@@ -38,14 +44,11 @@ class Review(ndb.Model):
 class MainPage(webapp2.RequestHandler):
 
     def get(self):
-        game_name = self.request.get('game_name', DEFAULT_GAME_NAME)
+        game_name = self.request.get('game_name',
+                                     DEFAULT_GAME_NAME)
 
-        if (game_name is DEFAULT_GAME_NAME) and (Game.query().get() is None):
-            game = Game(name=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRES)
-            game.put()
-
-        review_query = Review.query()
-        forum = review_query.fetch(10)
+        review_query = Review.query(ancestor=game_key(game_name)).order(-Review.date)
+        reviews = review_query.fetch(10)
 
         user = users.get_current_user()
 
@@ -58,7 +61,7 @@ class MainPage(webapp2.RequestHandler):
 
         template_values = {
             'user': user,
-            'forum': forum,
+            'reviews': reviews,
             'game_name': game_name,
             'url': url,
             'url_linktext': url_linktext,
@@ -68,33 +71,28 @@ class MainPage(webapp2.RequestHandler):
         self.response.write(template.render(template_values))
 
 
-class ReviewForum(webapp2.RequestHandler):
+class GameReview(webapp2.RequestHandler):
 
     def post(self):
-        game_name = self.request.get('game_name', DEFAULT_GAME_NAME)
+        game_name = self.request.get('game_name',
+                                     DEFAULT_GAME_NAME)
 
-        if (game_name is DEFAULT_GAME_NAME) and (Game.query().get() is None):
-            game = Game(name=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRES)
-            game.put()
-
-        review = Review()
+        review = Review(parent=game_key(game_name))
 
         if users.get_current_user():
             review.author = Author(
-                identity=users.get_current_user().user_id(),
-                email=users.get_current_user().email())
-
-        review.game = Game.query(Game.name == game_name).get()
+                    identity=users.get_current_user().user_id(),
+                    email=users.get_current_user().email())
 
         review.content = self.request.get('content')
         review.put()
 
         query_params = {'game_name': game_name}
-
         self.redirect('/?' + urllib.urlencode(query_params))
 
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/sign', ReviewForum),
+    ('/sign', GameReview),
 ], debug=True)
+

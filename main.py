@@ -87,7 +87,7 @@ class ReviewForum(webapp2.RequestHandler):
         review.content = self.request.get('content')
         key = review.put()
         game = Game.query(Game.name == game_name).get()
-        game.reviews.append(key)
+        game.reviews.append(key.get())
         game.put()
 
         query_params = {'game_name': game_name}

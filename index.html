@@ -66,16 +66,15 @@
         <div><textarea name="content" class="input-block-level" rows="3"></textarea></div>
         <div><input type="submit" class="btn btn-large btn-primary" value="Review"></div>
       </form>
-
       <hr>
-
+    </div>
+    <div class="container">
       <form class="form-inline">
         <div class="form-group mb-2">
           <label for="staticGameName" class="sr-only">Current game: </label>
           <input type="text" readonly class="form-control-plaintext" id="staticGameName" value="{{ game_name }}">
         </div>
       </form>
-
       <form>Change game
         <div class="form-group">
           <label for="changeGame"></label>
@@ -88,9 +87,9 @@
           <input type="submit" value="Switch">
         </div>
       </form>
-
       <hr>
-
+    </div>
+    <div class="container">
       <form id="frmInput" action="/addgame" method="post">
         <div class="form-group">
           <label for="addName">Name</label>

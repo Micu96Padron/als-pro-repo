@@ -90,4 +90,3 @@ app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/sign', GameReview),
 ], debug=True)
-

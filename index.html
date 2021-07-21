@@ -69,15 +69,16 @@
 
       <hr>
 
-      <form>Game name:
-        <input value="{{ game_name }}" name="game_name">
-
+      <form>Current game:
+        <label>
+          <input class="form-control" name="game_name" type="text" placeholder="{{ game_name }}" readonly>
+        </label>
       </form>
 
-      <form>Change game:
+      <form>Change game
         <div class="form-group">
-          <label for="exampleFormControlSelect1"></label>
-            <select class="form-control" id="exampleFormControlSelect1" name="game_name">
+          <label for="changeGame"></label>
+            <select class="form-control" id="changeGame" name="game_name">
               <option>1</option>
               <option>2</option>
               <option>3</option>
@@ -85,12 +86,14 @@
               <option>5</option>
             </select>
         </div>
-        <input type="submit" value="Switch">
+        <div class="ae-button-submit">
+          <input type="submit" value="Switch">
+        </div>
       </form>
 
       <hr>
 
-      <a class="btn btn-primary" href="/addgame" role="button">Add Game</a>
+      <a class="btn btn-primary btn-large" href="#" role="button">Add New Game</a>
     </div>
   </body>
 </html>

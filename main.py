@@ -92,11 +92,16 @@ class GameReview(webapp2.RequestHandler):
 class AddGame(webapp2.RequestHandler):
 
     def post(self):
-        game_name = self.request.get('game_name')
+        game_name = self.request.get('game_name', DEFAULT_GAME_NAME)
 
-        game = Game(id=game_name)
+        game_id = self.request.get('game_id')
+
+        game = Game(id=game_id)
         game.genre = self.request.get('genre')
         game.put()
+
+        query_params = {'game_name': game_name}
+        self.redirect('/?' + urllib.urlencode(query_params))
 
 
 class RetGames(webapp2.RequestHandler):

@@ -43,7 +43,7 @@ class MainPage(webapp2.RequestHandler):
         game_name = self.request.get('game_name', DEFAULT_GAME_NAME)
 
         if Game.query().get() is None:
-            game = Game(id=DEFAULT_GAME_NAME, name=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRE)
+            game = Game(id=DEFAULT_GAME_NAME, genre=DEFAULT_GAME_GENRE)
             game.put()
 
         review_query = Review.query(ancestor=game_key(game_name)).order(-Review.date)
@@ -94,9 +94,22 @@ class AddGame(webapp2.RequestHandler):
     def post(self):
         game_name = self.request.get('game_name')
 
-        game = Game(name=game_name, id=game_name)
+        game = Game(id=game_name)
         game.genre = self.request.get('genre')
         game.put()
+
+
+class RetGames(webapp2.RequestHandler):
+
+    def get(self):
+        games = Game.query().fetch()
+
+        template_values = {
+            'games': games,
+        }
+
+        template = JINJA_ENVIRONMENT.get_template('index.html')
+        self.response.write(template.render(template_values))
 
 
 app = webapp2.WSGIApplication([

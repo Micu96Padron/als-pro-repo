@@ -82,7 +82,7 @@
             <select class="form-control" id="changeGame" name="game_name">
               <option selected disabled hidden style='display: none' value=''></option>
               {% for game in games %}
-                <option>{{ game.name }}</option>
+                <option>{{ game.id }}</option>
               {% endfor %}
             </select>
         </div>

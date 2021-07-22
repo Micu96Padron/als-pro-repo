@@ -81,7 +81,9 @@
           <label for="changeGame"></label>
             <select class="form-control" id="changeGame" name="game_name">
               <option selected disabled hidden style='display: none' value=''></option>
-              <option>2</option>
+              {% for game in games %}
+                <option>{{ game.name }}</option>
+              {% endfor %}
             </select>
         </div>
         <div class="ae-button-submit">
